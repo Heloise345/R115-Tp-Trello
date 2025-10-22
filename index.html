@@ -171,14 +171,27 @@
       'tir': '#grid-tir'
     };
 
-    function cardHTML(g){
-      var tags = g.c.split(/\s+/).map(function(x){return '<span class="tag">'+x.charAt(0).toUpperCase()+x.slice(1)+'</span>';}).join('');
-      return '<a class="card" data-title="'+g.t+'" data-tags="'+g.k+'" data-categories="'+g.c+'" href="'+g.u+'" target="_blank" rel="noopener">'
-           + '<span class="play">Jouer</span>'
-           + '<div class="thumb"><div class="abbr">'+g.a+'</div></div>'
-           + '<div class="card-body"><div class="title">'+g.t+'</div><div class="meta">'+tags+'</div></div>'
-           + '</a>';
+function cardHTML(g){
+    var tags = g.c.split(/\s+/).map(function(x){return '<span class="tag">'+x.charAt(0).toUpperCase()+x.slice(1)+'</span>';}).join('');
+    
+    // NOUVEAU LOGIQUE : Choisir entre l'image (g.i) ou l'abréviation (g.a)
+    var thumbContent = '';
+    
+    if (g.i) { // Si la clé 'i' (image) existe pour le jeu
+        // Utiliser l'image fournie
+        thumbContent = '<img src="' + g.i + '" alt="' + g.t + '" style="width:100%; height:100%; object-fit:cover;">';
+    } else { 
+        // Sinon, utiliser l'abréviation (l'emoji ou le texte)
+        thumbContent = '<div class="abbr">'+g.a+'</div>'; 
     }
+
+    return '<a class="card" data-title="'+g.t+'" data-tags="'+g.k+'" data-categories="'+g.c+'" href="'+g.u+'" target="_blank" rel="noopener">'
+        + '<span class="play">Jouer</span>'
+        // Utiliser le contenu de la vignette (thumbContent) déterminé ci-dessus
+        + '<div class="thumb">' + thumbContent + '</div>' 
+        + '<div class="card-body"><div class="title">'+g.t+'</div><div class="meta">'+tags+'</div></div>'
+        + '</a>';
+}
 
     // Place each game into its relevant section(s)
     GAMES.forEach(function(g){
